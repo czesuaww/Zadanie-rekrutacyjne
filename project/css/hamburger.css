@@ -1,0 +1,64 @@
+.hamburger {
+  display: inline-block;
+  cursor: pointer;
+  transition: opacity 0.15s linear;
+  background: none;
+  border: none;
+  position: absolute;
+  top: 24px;
+  right: 81.5px;
+  z-index: 101;
+}
+
+.hamburger-box {
+  width: 22px;
+  display: inline-block;
+  position: relative;
+}
+
+.hamburger-inner,
+.hamburger-inner::before,
+.hamburger-inner::after {
+  display: block;
+  background-color: var(--main-color);
+  position: absolute;
+  height: 2px;
+  width: 100%; /* Zmieniono długość na 13px */
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  left: 0;
+  font-weight: 100; /* Dodano font-weight o wartości 200 */
+}
+
+.hamburger-inner {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.hamburger-inner::before {
+  content: "";
+  top: -6px;
+}
+
+.hamburger-inner::after {
+  content: "";
+  top: 6px;
+}
+
+.hamburger--spring.is-active .hamburger-inner {
+  background-color: transparent;
+}
+
+.hamburger--spring.is-active .hamburger-inner::before {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.hamburger--spring.is-active .hamburger-inner::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+@media (min-width: 450px) {
+  .hamburger {
+    display: none;
+  }
+}

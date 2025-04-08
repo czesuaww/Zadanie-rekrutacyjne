@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --main-font: "Inter", sans-serif;
+  --white-color: #ffffff;
+  --main-color: #1d1d1d;
+}
+
+html {
+  font-size: 62.5%;
+  font-family: var(--main-font);
+  color: var(--main-color);
+}
+
+.main {
+  /* display: inline-block; */
+  width: 100%;
+  text-align: center;
+  margin-top: 88px;
+}
+
+.main__hero {
+  margin-top: 24px;
+}
+
+.main__logo-img,
+.main__hero-img {
+  width: 100%;
+  max-width: 328px;
+  padding: 0 16px;
+}
+
+@media (min-width: 450px) {
+  .main__logo-img {
+    content: url("../img/FORMA\ ICON=Fill.png");
+  }
+}
