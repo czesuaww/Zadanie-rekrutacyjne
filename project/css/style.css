@@ -17,10 +17,10 @@ html {
 }
 
 .main {
-  /* display: inline-block; */
   width: 100%;
   text-align: center;
   margin-top: 88px;
+  margin-bottom: 100px;
 }
 
 .main__hero {
@@ -32,6 +32,10 @@ html {
   width: 100%;
   max-width: 328px;
   padding: 0 16px;
+}
+
+.main__frame {
+  margin-top: 36px;
 }
 
 @media (min-width: 450px) {
