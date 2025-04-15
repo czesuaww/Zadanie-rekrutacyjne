@@ -79,17 +79,16 @@ const utilityMethods = {
             selectList.innerHTML = "";
             const sorted = [current, ...values.filter((v) => v !== current)];
 
-            sorted.forEach((val, index) => {
+            sorted.forEach((selectedValue, index) => {
                 const li = document.createElement("li");
-                li.textContent = val;
-                li.dataset.value = val;
+                li.textContent = selectedValue;
+                li.dataset.value = selectedValue;
 
                 if (index === 0) li.classList.add("first");
 
                 li.addEventListener("click", async () => {
                     if (index !== 0) {
-                        current = val;
-                        current = current;
+                        current = selectedValue;
                         renderList();
                         selectList.classList.remove("open");
                         domElements.productList.innerHTML = "";
@@ -177,7 +176,7 @@ const userInteractionHandlers = {
                 popup.classList.remove("hidden");
             }
 
-            if (e.target.id === "popup-close") document.getElementById("product-popup").classList.add("hidden");
+            if (e.target.id === "popup-close") popup.classList.add("hidden");
 
             if (e.target === popup || e.target.classList.contains("popup")) popup.classList.add("hidden");
 
