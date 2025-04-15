@@ -8,12 +8,17 @@
   --main-font: "Inter", sans-serif;
   --white-color: #ffffff;
   --main-color: #1d1d1d;
+  --main-back-color: #eaeae8;
+  --swiper-theme-color: #1d1d1d;
+  --best-color: #d9d6b0;
+  --purple-color: #d4b0d9;
 }
 
 html {
   font-size: 62.5%;
   font-family: var(--main-font);
   color: var(--main-color);
+  padding: 0 16px;
 }
 
 .main {
@@ -31,15 +36,29 @@ html {
 .main__hero-img {
   width: 100%;
   max-width: 328px;
-  padding: 0 16px;
 }
 
 .main__frame {
   margin-top: 36px;
 }
 
-@media (min-width: 450px) {
+@media (min-width: 700px) {
+  html {
+    padding: 0 42px;
+  }
+}
+
+@media (min-width: 550px) {
+  .main {
+    text-align: unset;
+  }
   .main__logo-img {
-    content: url("../img/FORMA\ ICON=Fill.png");
+    max-width: 918px;
+    text-align: left;
+    content: url("../img/LOGO FORMA desktop.png");
+  }
+  .main__hero {
+    width: 100%;
+    content: url("../img/HERO PHOTO dekstop.png");
   }
 }

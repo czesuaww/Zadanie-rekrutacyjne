@@ -1,6 +1,6 @@
 .hamburger {
+  position: fixed !important;
   display: inline-block;
-  cursor: pointer;
   transition: opacity 0.15s linear;
   background: none;
   border: none;
@@ -8,6 +8,7 @@
   top: 24px;
   right: 81.5px;
   z-index: 101;
+  cursor: pointer;
 }
 
 .hamburger-box {
@@ -23,11 +24,11 @@
   background-color: var(--main-color);
   position: absolute;
   height: 2px;
-  width: 100%; /* Zmieniono długość na 13px */
+  width: 100%;
   border-radius: 4px;
   transition: all 0.3s ease;
   left: 0;
-  font-weight: 100; /* Dodano font-weight o wartości 200 */
+  font-weight: 100;
 }
 
 .hamburger-inner {
@@ -57,7 +58,7 @@
   transform: translateY(-6px) rotate(-45deg);
 }
 
-@media (min-width: 450px) {
+@media (min-width: 700px) {
   .hamburger {
     display: none;
   }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,41 +13,55 @@
     <link rel="stylesheet" href="../css/header.css" />
     <link rel="stylesheet" href="../css//hamburger.css" />
     <link rel="stylesheet" href="../css/frame.css" />
+    <link rel="stylesheet" href="../css/products.css" />
     <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
     <div class="wrapper">
-      <header class="header">
-        <div class="header__text">
-          <div class="header__text-container">
-            <img src="../img/FORMA ICON.png" alt="F icon" class="header__text-container-icon" />
-            <p class="header__text-container-title">Forma'sint.</p>
-          </div>
-          <p class="header__text-container-menu">MENU</p>
+      <header class="headerMobile">
+        <div class="headerMobile__left-container">
+          <img src="../img/FORMA ICON.png" alt="F icon" class="headerMobile__left-container-icon" />
+          <p class="headerMobile__left-container-title">Forma'sint.</p>
         </div>
 
-        <button class="hamburger hamburger--spring" type="button">
-          <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-          </span>
-        </button>
+        <p class="headerMobile__rightMenu">MENU</p>
+      </header>
+      <button class="hamburger hamburger--spring" type="button">
+        <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+        </span>
+      </button>
+      <!-- Przenieś poza header -->
+      <div class="nav-overlay"></div>
 
-        <nav class="nav nav-mobile">
-          <div class="nav__icon">
-            <img src="../img/FORMA ICON.png" alt="F icon" class="nav__icon-iconImage" />
-            <p class="nav__icon-close">CLOSE</p>
+      <nav class="nav headerMobile__nav">
+        <div class="headerMobile__nav-icon">
+          <img src="../img/FORMA ICON.png" alt="F icon" class="headerMobile__nav-icon-iconImage" />
+          <p class="headerMobile__nav-icon-close">CLOSE</p>
+        </div>
+        <div class="headerMobile__nav-links">
+          <a href="#" class="headerMobile__nav-links-link">home</a>
+          <a href="#frame" class="headerMobile__nav-links-link">Featured products</a>
+          <a href="#products" class="headerMobile__nav-links-link">Product listing</a>
+        </div>
+      </nav>
+      <div class="nav-overlay"></div>
+      <header class="headerDesktop">
+        <nav class="nav headerDesktop__nav">
+          <div class="headerDesktop__nav-container">
+            <img src="../img/FORMA ICON.png" alt="F icon" class="headerDesktop__nav-container-icon" />
+            <p class="headerDesktop__nav-container-title">Forma'sint.</p>
+            <p class="headerDesktop__nav-container-title">idomods &lt;/&gt;</p>
           </div>
-          <div class="nav__links">
-            <a href="#" class="nav__links-link">home</a>
-            <a href="#aboutme" class="nav__links-link">Featured products</a>
-            <a href="#skills" class="nav__links-link">Product listing</a>
+          <div class="headerDesktop__nav-links">
+            <a href="#" class="headerDesktop__nav-links-link">home</a>
+            <a href="#frame" class="headerDesktop__nav-links-link">Featured products</a>
+            <a href="#products" class="headerDesktop__nav-links-link">Product listing</a>
           </div>
-        </nav>
-
-        <nav class="nav nav-desktop">
-          <a href="#" class="nav__link">home</a>
-          <a href="#aboutme" class="nav__link">Featured products</a>
-          <a href="#skills" class="nav__link">Product listing</a>
+          <div class="headerDesktop__nav-icon">
+            <img src="../img/ICONS=Icon_user.png" alt="user icon" class="headerDesktop__nav-icon-img" />
+            <p class="headerDesktop__nav-icon-text">Frontend developer</p>
+          </div>
         </nav>
       </header>
       <main class="main">
@@ -58,7 +72,7 @@
           <img src="../img/HERO PHOTO.png" alt="hero photo" class="main__hero-img" />
         </div>
 
-        <div class="main__frame">
+        <div class="main__frame" id="frame">
           <header class="main__frame-text">
             <h3 class="main__frame-text-about">featured products</h3>
             <h2 class="main__frame-text-title">Browse featured</h2>
@@ -228,106 +242,27 @@
             </div>
           </div>
         </div>
+
+        <div class="main__products">
+          <div class="main__products-container" id="products">
+            <p class="main__products-container-title">number of products per page</p>
+            <div class="main__products-container-customSelect">
+              <ul class="main__products-container-customSelect-list"></ul>
+            </div>
+          </div>
+
+          <section class="main__products-list" id="product-list"></section>
+        </div>
       </main>
     </div>
+
+    <div id="product-popup" class="popup hidden">
+      <div class="popup-content">
+        <button id="popup-close" class="popup-close">✕ Close</button>
+        <img id="popup-image" src="" alt="popup image" />
+        <p id="popup-id"></p>
+      </div>
+    </div>
+    <script src="../javascript/script.js"></script>
   </body>
-
-  <script>
-    const hamburger = document.querySelector(".hamburger");
-    const navMobile = document.querySelector(".nav-mobile");
-    console.log(hamburger);
-    hamburger.addEventListener("click", () => {
-      hamburger.classList.toggle("is-active");
-      navMobile.classList.toggle("nav-mobile--active");
-    });
-
-    document.querySelectorAll(".nav__link").forEach((link) => {
-      link.addEventListener("click", () => {
-        hamburger.classList.remove("is-active");
-        navMobile.classList.remove("nav-mobile--active");
-      });
-    });
-  </script>
-  <script>
-    const swiperContainer = document.querySelector(".swiper-wrapper");
-    const slides = swiperContainer.children;
-    const totalSlides = slides.length;
-    const slidesPerView = getSlidesPerView();
-    const slidesPerGroup = slidesPerView;
-    const missingSlides = slidesPerGroup - (totalSlides % slidesPerGroup);
-
-    function getSlidesPerView() {
-      if (window.innerWidth >= 1100) return 4;
-      if (window.innerWidth >= 767) return 3;
-      return 2;
-    }
-
-    // Jeśli nie ma pełnej grupy — dodaj klony
-    if (missingSlides > 0 && missingSlides < slidesPerGroup) {
-      for (let i = 0; i < missingSlides; i++) {
-        const clonedSlide = slides[i].cloneNode(true);
-        swiperContainer.appendChild(clonedSlide);
-      }
-    }
-
-    const swiper = new Swiper(".swiper", {
-      slidesPerView: 1.2,
-      slidesPerGroup: 1,
-      spaceBetween: 16,
-      grabCursor: true,
-      loop: false,
-      freeMode: {
-        enabled: true,
-        sticky: true,
-      },
-      navigation: {
-        nextEl: ".swiper-navigation__next-btn",
-        prevEl: ".swiper-navigation__prev-btn",
-      },
-      pagination: {
-        el: ".swiper-pagination",
-        type: "progressbar",
-      },
-      breakpoints: {
-        1100: {
-          slidesPerView: 4,
-          spaceBetween: 24,
-        },
-        767: {
-          slidesPerView: 3.2,
-        },
-        450: {
-          slidesPerView: 2.2,
-        },
-      },
-    });
-
-    // Strzałki
-    const prevArrow = document.querySelector(".swiper-navigation__prev-btn");
-    const nextArrow = document.querySelector(".swiper-navigation__next-btn");
-
-    function updateArrowVisibility() {
-      if (swiper.isBeginning) {
-        prevArrow.style.opacity = "0";
-        prevArrow.style.pointerEvents = "none";
-      } else {
-        prevArrow.style.opacity = "1";
-        prevArrow.style.pointerEvents = "auto";
-      }
-
-      if (swiper.isEnd) {
-        nextArrow.style.opacity = "0";
-        nextArrow.style.pointerEvents = "none";
-      } else {
-        nextArrow.style.opacity = "1";
-        nextArrow.style.pointerEvents = "auto";
-      }
-    }
-
-    // 🔥 Od razu po inicjalizacji
-    updateArrowVisibility();
-
-    // 🔄 Przy każdej zmianie slajdu
-    swiper.on("slideChange", updateArrowVisibility);
-  </script>
 </html>
