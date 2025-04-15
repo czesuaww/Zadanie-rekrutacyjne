@@ -52,7 +52,7 @@ const productRenderer = {
                 bannerElement.classList.add("product", "banner", "fade-in");
                 bannerElement.innerHTML = `
               <div class="main__products-list-banner">
-                <img src="../img/baner.jfif" alt="banner" class="main__products-list-banner-img">
+                <img src="./img/baner.jfif" alt="banner" class="main__products-list-banner-img">
                 <div class="main__products-list-banner-text">
                   <div class="main__products-list-banner-text-top">
                     <p>Forma’sint.</p>
