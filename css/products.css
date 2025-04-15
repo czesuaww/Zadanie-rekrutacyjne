@@ -218,6 +218,7 @@
   position: absolute;
   top: 12px;
   right: 16px;
+  color: var(--main-color);
   background: none;
   border: none;
   font-size: 1.6rem;
