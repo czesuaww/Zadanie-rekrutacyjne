@@ -58,7 +58,7 @@ const productRenderer = {
                     <p>Forma’sint.</p>
                     <h2>You’ll look and feel like the <br> champion.</h2>
                   </div>
-                  <a href="#products" class="main__products-list-banner-text-button">Check this out <img src="../img/ICONS=chevron_right.png" alt="banner" class="main__products-list-banner-text-button-arrow"></a>
+                  <a href="#products" class="main__products-list-banner-text-button">Check this out <img src="./img/ICONS=chevron_right.png" alt="banner" class="main__products-list-banner-text-button-arrow"></a>
                     
                   </div>
               </div>
