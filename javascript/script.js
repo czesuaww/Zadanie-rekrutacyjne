@@ -73,7 +73,7 @@ const productRenderer = {
 
 const utilityMethods = {
     initializeUtilities() {
-        const { selectList, navMobile, navOverlay, hamburger } = domElements;
+        const { selectList } = domElements;
 
         const renderList = () => {
             selectList.innerHTML = "";
@@ -103,6 +103,7 @@ const utilityMethods = {
                 selectList.appendChild(li);
             });
         };
+        renderList();
     }
 }
 
