@@ -37,6 +37,7 @@
 
 .nav {
   position: fixed;
+  top: 0px;
 }
 
 .headerMobile__nav {
@@ -62,7 +63,7 @@
   gap: 163px;
   top: 24px;
   left: 32px;
-  z-index: 101; /* na wszelki wypadek, żeby był nad overlay */
+  z-index: 101;
 }
 
 .headerMobile__nav-icon-iconImage,
@@ -103,8 +104,8 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #1d1d1dcc; /* cień */
-  z-index: 1; /* mniej niż nav z-index */
+  background-color: #1d1d1dcc;
+  z-index: 1;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -117,7 +118,7 @@
 
 .nav-overlay {
   left: 0;
-  right: 290px; /* szerokość menu */
+  right: 290px;
 }
 
 @media (min-width: 700px) {
@@ -129,8 +130,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 72px;
-    /* margin-top: 32px; */
   }
 
   .headerDesktop__nav {
@@ -142,7 +141,6 @@
     height: 88px;
     z-index: 2;
     padding: 0 42px;
-    margin-top: 15px;
     font-size: 0.8rem;
   }
 
