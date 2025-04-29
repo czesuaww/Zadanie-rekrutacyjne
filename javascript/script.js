@@ -1,9 +1,10 @@
-const values = ["14", "24", "36"];
-let current = "14";
+
 
 const domElements = {
     navMobile: document.querySelector(".headerMobile__nav"),
     mobileLinks: document.querySelectorAll(".headerMobile__nav-links-link"),
+    mobileMenuText: document.querySelector(".headerMobile__rightMenu"),
+    mobileCloseBtn: document.querySelector(".headerMobile__nav-icon-close"),
     navOverlay: document.querySelector(".nav-overlay"),
     hamburger: document.querySelector(".hamburger"),
     customSelect: document.querySelector(".main__products-container-customSelect"),
@@ -16,59 +17,67 @@ const domElements = {
     popupId: document.getElementById("popup-id"),
 };
 
+const values = ["14", "24", "36"];
+let current = "14";
+let pageNumber = 1;
+let bannerRendered = false;
+let isProductLoaded = false;
 const productRenderer = {
-    renderProducts: async function () {
+
+    async renderProducts() {
+
+        if (isProductLoaded) return;
+        isProductLoaded = true;
+
         const { productList } = domElements;
         const { getJsonValues } = dataFetcher.initializeDataFetcher();
-
-        if (!productList) return;
-
-        const products = await getJsonValues();
+        const pageSize = parseInt(current);
+        const newProducts = await getJsonValues(pageSize, pageNumber);
         const fragment = document.createDocumentFragment();
-
         const isMobile = window.matchMedia("(max-width: 699px)").matches;
         const bannerIndex = isMobile ? 3 : 4;
 
-        products.forEach((product, index) => {
+        pageNumber++;
+
+        newProducts.forEach((product, index) => {
             const productElement = document.createElement("div");
             productElement.classList.add("product", "fade-in");
 
             productElement.innerHTML = `
-              <img
-                class="main__products-list-img"
-                src="${product.image}"
-                alt="product-${product.id}"
-                loading="lazy"
-                data-id="${product.id}"
-                data-src="${product.image}"
-              >
-              <p class="main__products-list-id">ID: ${product.id}</p>
-          `;
+                <img class="main__products-list-img"
+                     src="${product.image}"
+                     alt="product-${product.id}"
+                     loading="lazy"
+                     data-id="${product.id}">
+                <p class="main__products-list-id">ID: ${product.id}</p>
+            `;
 
             fragment.appendChild(productElement);
 
-            if (index === bannerIndex) {
-                const bannerElement = document.createElement("div");
-                bannerElement.classList.add("product", "banner", "fade-in");
-                bannerElement.innerHTML = `
-              <div class="main__products-list-banner">
-                <img src="./img/baner.jfif" alt="banner" class="main__products-list-banner-img">
-                <div class="main__products-list-banner-text">
-                  <div class="main__products-list-banner-text-top">
-                    <p>Forma’sint.</p>
-                    <h2>You’ll look and feel like the <br> champion.</h2>
-                  </div>
-                  <a href="#products" class="main__products-list-banner-text-button">Check this out <img src="./img/ICONS=chevron_right.png" alt="banner" class="main__products-list-banner-text-button-arrow"></a>
-                    
-                  </div>
-              </div>
-            `;
-                fragment.appendChild(bannerElement);
+            if (!bannerRendered && index === bannerIndex) {
+                const banner = document.createElement("div");
+                banner.classList.add("product", "banner", "fade-in");
+                banner.innerHTML = `
+                    <div class="main__products-list-banner">
+                        <img src="./img/baner.jfif" alt="banner" class="main__products-list-banner-img">
+                        <div class="main__products-list-banner-text">
+                            <div class="main__products-list-banner-text-top">
+                                <p>Forma’sint.</p>
+                                <h2>You’ll look and feel like the <br> champion.</h2>
+                            </div>
+                            <a href="#products" class="main__products-list-banner-text-button">Check this out <img src="./img/ICONS=chevron_right.png" alt="banner" class="main__products-list-banner-text-button-arrow"></a>
+                        </div>
+                    </div>`;
+                fragment.appendChild(banner);
+                bannerRendered = true;
             }
         });
 
         productList.appendChild(fragment);
-    },
+        productObservers.initializeObservers();
+
+        isProductLoaded = false;
+    }
 };
 
 const utilityMethods = {
@@ -89,11 +98,11 @@ const utilityMethods = {
                 li.addEventListener("click", async () => {
                     if (index !== 0) {
                         current = selectedValue;
+                        pageNumber = 1;
                         renderList();
                         selectList.classList.remove("open");
                         domElements.productList.innerHTML = "";
                         await productRenderer.renderProducts();
-                        productObservers.initializeObservers();
                     } else {
                         selectList.classList.toggle("open");
                     }
@@ -104,32 +113,20 @@ const utilityMethods = {
         };
         renderList();
     }
-}
+};
 
 const dataFetcher = {
     initializeDataFetcher: function () {
-        const getJsonValues = async () => {
+        const getJsonValues = async (pageSize = 14, pageNumber = 1) => {
             try {
-                const response = await fetch("https://brandstestowy.smallhost.pl/api/random");
+                const url = `https://brandstestowy.smallhost.pl/api/random?pageSize=${pageSize}&pageNumber=${pageNumber}`;
+                console.log(url);
+                const response = await fetch(url);
 
                 if (!response.ok) throw new Error(`Error: ${response.status}`);
-
                 const data = await response.json();
 
-                const allProducts = data.data;
-                const targetCount = parseInt(current);
-
-                let nextId = 1;
-
-                const repeated = Array.from({ length: Math.ceil(targetCount / allProducts.length) }, () => allProducts).flat();
-                const sliced = repeated.slice(0, targetCount);
-
-                const result = sliced.map((product) => ({
-                    ...product,
-                    id: nextId++,
-                }));
-
-                return result;
+                return data.data;
             } catch (error) {
                 console.error("Error occurred:", error.message);
             }
@@ -140,34 +137,53 @@ const dataFetcher = {
 };
 
 const productObservers = {
+
     initializeObservers() {
         const products = document.querySelectorAll(".product");
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("visible");
-                        observer.unobserve(entry.target);
-                    }
-                });
-            },
-            { threshold: 0.2 }
-        );
-        products.forEach((product) => observer.observe(product));
-    },
+        const fadeInObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) entry.target.classList.add("visible");
+            });
+
+        }, { threshold: 0.2 });
+
+        products.forEach((product) => fadeInObserver.observe(product));
+
+
+        const lastProduct = products[products.length - 1];
+
+        if (!lastProduct) return;
+
+        const loadMoreObserver = new IntersectionObserver(async ([entry]) => {
+            if (entry.isIntersecting) await productRenderer.renderProducts();
+        }, { threshold: 1 });
+
+        loadMoreObserver.observe(lastProduct);
+    }
 };
 
 const userInteractionHandlers = {
     initializeUserInteractionEvents() {
+        const { hamburger, mobileLinks, navMobile, mobileMenuText, mobileCloseBtn, navOverlay, popup, popupImg, popupId } = domElements;
 
-        const { hamburger, mobileLinks, navMobile, navOverlay, popup, popupImg, popupId } = domElements
+        const openMobileNav = () => {
+            hamburger.classList.toggle("is-active");
+            navMobile.classList.toggle("headerMobile__nav--active");
+            navOverlay.classList.toggle("nav-overlay--active");
+        }
+
+        const closeMobileNav = () => {
+            navMobile.classList.remove("headerMobile__nav--active");
+            hamburger.classList.remove("is-active");
+            navOverlay.classList.remove("nav-overlay--active");
+        }
 
         document.addEventListener("click", (e) => {
             const img = e.target.closest(".main__products-list-img");
 
             if (img) {
-                const src = img.dataset.src;
+                const src = img.src;
                 const id = img.dataset.id;
 
                 popupImg.src = src;
@@ -177,32 +193,25 @@ const userInteractionHandlers = {
             }
 
             if (e.target.id === "popup-close") popup.classList.add("hidden");
-
             if (e.target === popup || e.target.classList.contains("popup")) popup.classList.add("hidden");
 
             const clickedInsideNav = navMobile.contains(e.target);
             const clickedHamburger = hamburger.contains(e.target);
 
-            if (!clickedInsideNav && !clickedHamburger) {
-                navMobile.classList.remove("headerMobile__nav--active");
-                hamburger.classList.remove("is-active");
-                navOverlay?.classList.remove("nav-overlay--active");
-            }
+            if (!clickedInsideNav && !clickedHamburger) closeMobileNav();
         });
 
-        hamburger.addEventListener("click", () => {
-            hamburger.classList.toggle("is-active");
-            navMobile.classList.toggle("headerMobile__nav--active");
-            navOverlay.classList.toggle("nav-overlay--active");
+
+        hamburger.addEventListener("click", () => openMobileNav());
+
+        document.addEventListener("click", (e) => {
+            if (e.target.classList.contains("headerMobile__rightMenu")) openMobileNav();
         });
 
-        mobileLinks.forEach((link) => {
-            link.addEventListener("click", () => {
-                navMobile.classList.remove("headerMobile__nav--active");
-                hamburger.classList.remove("is-active");
-                navOverlay.classList.remove("nav-overlay--active");
-            });
+        navMobile.addEventListener("click", (e) => {
+            if (e.target.matches(".headerMobile__nav-links-link") || e.target.matches(".headerMobile__nav-icon-close")) closeMobileNav();
         });
+
     }
 };
 
@@ -211,33 +220,36 @@ const swiperObj = {
         const { nextArrow, prevArrow } = domElements;
 
         const swiper = new Swiper(".swiper", {
-            slidesPerView: 1.2,
+            slidesPerView: 1,
             slidesPerGroup: 1,
             spaceBetween: 16,
             grabCursor: true,
             loop: false,
-            freeMode: {
-                enabled: true,
-                sticky: true,
-            },
             navigation: {
                 nextEl: nextArrow,
                 prevEl: prevArrow
             },
             pagination: {
                 el: ".swiper-pagination",
-                type: "progressbar",
+                clickable: true,
+                type: "bullets",
+                renderBullet: function (index, className) {
+                    return `<span class="${className} swiper-pagination-line"></span>`;
+                }
             },
             breakpoints: {
                 1100: {
                     slidesPerView: 4,
+                    slidesPerGroup: 1,
                     spaceBetween: 24,
                 },
                 867: {
-                    slidesPerView: 3.2,
+                    slidesPerView: 3,
+                    slidesPerGroup: 1,
                 },
                 550: {
-                    slidesPerView: 2.2,
+                    slidesPerView: 2,
+                    slidesPerGroup: 1,
                 },
             },
         });
@@ -258,14 +270,12 @@ const swiperObj = {
                 nextArrow.style.opacity = "1";
                 nextArrow.style.pointerEvents = "auto";
             }
-        }
+        };
 
         swiper.on("slideChange", updateArrowVisibility);
         updateArrowVisibility();
     }
-}
-
-
+};
 const main = async () => {
     await productRenderer.renderProducts();
     utilityMethods.initializeUtilities();

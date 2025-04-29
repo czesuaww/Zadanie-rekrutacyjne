@@ -22,12 +22,27 @@
   cursor: pointer;
 }
 
+.headerMobile__nav-icon {
+  display: flex;
+  position: fixed;
+  align-items: center;
+  gap: 163px;
+  top: 24px;
+  left: 32px;
+  z-index: 101;
+}
+
 .headerMobile__left-container-title,
 .headerMobile__rightMenu,
 .headerMobile__nav-icon-close {
   font-size: 1.6rem;
   font-weight: 500;
   text-transform: uppercase;
+}
+
+.headerMobile__rightMenu,
+.headerMobile__nav-icon-close {
+  cursor: pointer;
 }
 
 .headerMobile__left-container-title {
@@ -55,15 +70,6 @@
 
 .headerMobile__nav--active {
   transform: translateX(0);
-}
-
-.headerMobile__nav-icon {
-  display: flex;
-  position: fixed;
-  gap: 163px;
-  top: 24px;
-  left: 32px;
-  z-index: 101;
 }
 
 .headerMobile__nav-icon-iconImage,
